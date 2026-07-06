@@ -34,6 +34,10 @@ $data = $app->run();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spruch des Tages</title>
+    <link rel="icon" type="image/png" href="assets/favicon/handshake.png">
+    <meta name="description" content="Jeden Tag ein neuer Motivationsspruch oder ein inspirierendes Zitat. Lass dich täglich neu inspirieren!">
+    <meta name="keywords" content="Motivation, Zitate, Inspiration, täglicher Spruch, Erfolg, Durchhaltevermögen">
+    <meta name="author" content="Ronny Melzer - RonDev">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style nonce="<?php echo $nonce; ?>">
         body {
