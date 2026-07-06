@@ -1,6 +1,6 @@
 # Daily Quote – Der datenschutzkonforme Spruch des Tages
 
-Ein extrem ressourcensparendes, autarkes PHP-Projekt, das jeden Tag vollautomatisch einen anderen motivierenden Spruch aus einer lokalen Datei anzeigt. Das Hintergrundbild rotiert ebenfalls täglich deterministisch mit.
+Ein extrem ressourcensparendes, autarkes PHP-Projekt, das jeden Tag vollautomatisch einen anderen motivierenden Spruch ***(Aktuell 167)*** aus einer lokalen Datei anzeigt. Das Hintergrundbild rotiert ebenfalls täglich deterministisch mit.
 
 ## Features
 - **100% Datenschutzkonform:** Keine Cookies, keine Sessions, kein LocalStorage.
