@@ -17,46 +17,29 @@ class App
      */
     public function run(): array
     {
+        // Absoluter, fixer Pfad im Docker-Container
         $quotesFile = $this->basePath . '/data/quotes.php';
         $quotes = null;
 
-        // Wenn die Datei da ist, versuchen wir sie normal zu laden
         if (file_exists($quotesFile)) {
-            // Falls Leserechte durch einen ungleichen Docker-Volume-Mount blockiert sind
-            if (!is_readable($quotesFile)) {
-                // Notfall-Modus: Versuche die Datei direkt über den absoluten Container-Pfad zu erzwingen
-                $quotes = @include($quotesFile);
-            } else {
-                $quotes = require $quotesFile;
-            }
+            $quotes = require $quotesFile;
         }
 
-        // Kaskadierender Fallback auf die relative Pfadstruktur, falls Root-Mount blockiert
-        if (!is_array($quotes)) {
-            $altPath = dirname(__DIR__) . '/data/quotes.php';
-            if (file_exists($altPath)) {
-                $quotes = require $altPath;
-            }
-        }
-
-        // Letzte Instanz: Wenn die Datei absolut unzugänglich ist, nutzen wir das interne Standard-Array
+        // Sollte das Array aus irgendeinem Grund dennoch nicht ladbar sein, 
+        // bricht die App nicht ab, sondern zeigt diesen Fehler-Spruch direkt im Design an.
         if (!is_array($quotes) || empty($quotes)) {
             $quotes = [
-                1 => ['text' => 'Die Definition von Wahnsinn ist, immer wieder das Gleiche zu tun und andere Ergebnisse zu erwarten.', 'author' => 'Standard'],
-                2 => ['text' => 'Es gibt nur einen Weg, um großartige Arbeit zu leisten: Tue, was du liebst.', 'author' => 'Standard'],
-                3 => ['text' => 'Der beste Weg, die Zukunft vorherzusagen, ist, sie selbst zu gestalten.', 'author' => 'Standard'],
-                4 => ['text' => 'Nur wer sein Ziel kennt, findet den Weg.', 'author' => 'Standard'],
-                5 => ['text' => 'Machen ist wie wollen, nur krasser.', 'author' => 'Standard']
+                1 => [
+                    'text' => 'Fehler: Die data/quotes.php konnte nicht ausgelesen werden. Bitte Image neu bauen.', 
+                    'author' => 'System'
+                ]
             ];
         }
 
         // 2. Hintergrundbilder ermitteln
         $bgDir = $this->basePath . '/public/assets/bg';
-        if (!is_dir($bgDir)) {
-            $bgDir = dirname(__DIR__) . '/public/assets/bg';
-        }
-
         $images = [];
+        
         if (is_dir($bgDir) && is_readable($bgDir)) {
             $files = scandir($bgDir);
             foreach ($files as $file) {
@@ -78,7 +61,7 @@ class App
             $imageIndex = $dayOfYear % $imageCount;
             $selectedImage = '/assets/bg/' . $images[$imageIndex];
         } else {
-            // Trackingsicherer, nativer Platzhalter-Hintergrund
+            // Datenschutzkonformer Fallback via Unsplash (ohne Tracker)
             $selectedImage = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80';
         }
 
