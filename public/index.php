@@ -33,6 +33,19 @@ $ownerName   = getenv('APP_OWNER_NAME')   ?: '[Dein Name / Betreibername]';
 $ownerStreet = getenv('APP_OWNER_STREET') ?: '[Deine Straße und Hausnummer]';
 $ownerCity   = getenv('APP_OWNER_CITY')   ?: '[Deine PLZ und Ort]';
 $ownerEmail  = getenv('APP_OWNER_EMAIL')  ?: '[Deine E-Mail-Adresse]';
+
+// Logik für die intelligente Erkennung der E-Mail / des Kontakt-Links
+$emailHtml = '';
+$trimmedEmail = trim($ownerEmail);
+
+if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
+    // Wenn es eine URL ist (z.B. MailShield), generieren wir einen sicheren Link
+    $emailHtml = '<a href="' . htmlspecialchars($trimmedEmail, ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline">Kontaktformular / MailShield</a>';
+} else {
+    // Wenn es eine normale E-Mail ist, machen wir sie unkopierbar und drehen sie per CSS um (Spambot-Schutz)
+    $reversedEmail = strrev($trimmedEmail);
+    $emailHtml = '<span class="inline-block select-none pointer-events-none" style="direction: rtl; unicode-bidi: bidi-override;">' . htmlspecialchars($reversedEmail, ENT_QUOTES, 'UTF-8') . '</span>';
+}
 ?>
 <!DOCTYPE html>
 <html lang="de" class="min-h-dvh">
@@ -98,7 +111,7 @@ $ownerEmail  = getenv('APP_OWNER_EMAIL')  ?: '[Deine E-Mail-Adresse]';
                     <?php echo htmlspecialchars($ownerCity, ENT_QUOTES, 'UTF-8'); ?>
                 </p>
                 <p class="font-bold mt-4">Kontakt:</p>
-                <p>E-Mail: <?php echo htmlspecialchars($ownerEmail, ENT_QUOTES, 'UTF-8'); ?></p>
+                <p>E-Mail: <?php echo $emailHtml; ?></p>
             </div>
             <button id="close-impressum" class="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition-colors cursor-pointer">Schließen</button>
         </div>
