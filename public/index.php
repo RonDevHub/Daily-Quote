@@ -11,6 +11,23 @@ $nonce = base64_encode(random_bytes(16));
 // CSP erweitert, um das datenschutzkonforme Fallback-Bild zu erlauben, falls lokal keins geladen werden kann
 header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net 'nonce-$nonce'; img-src 'self' data: https://images.unsplash.com/; font-src 'self';");
 
+$rootDir = dirname(__DIR__);
+
+// Ressourcensparender, nativer .env-Parser für klassisches Shared Hosting (z.B. All-Inkl)
+if (file_exists($rootDir . '/.env')) {
+    $lines = file($rootDir . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue; // Kommentare ignorieren
+        list($name, $value) = explode('=', $line, 2);
+        $name = trim($name);
+        $value = trim($value);
+        if (!getenv($name)) {
+            putenv(sprintf('%s=%s', $name, $value));
+            $_ENV[$name] = $value;
+        }
+    }
+}
+
 spl_autoload_register(function ($class) {
     $prefix = 'App\\';
     $base_dir = __DIR__ . '/../src/';
