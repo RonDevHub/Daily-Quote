@@ -40,7 +40,7 @@ $trimmedEmail = trim($ownerEmail);
 
 if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
     // Wenn es eine URL ist (z.B. MailShield), generieren wir einen sicheren Link
-    $emailHtml = '<a href="' . htmlspecialchars($trimmedEmail, ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline">Kontaktformular / MailShield</a>';
+    $emailHtml = '<a href="' . htmlspecialchars($trimmedEmail, ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener noreferrer"><img src="https://mail-shield.net/badge" alt="Protected by MailShield"></a>';
 } else {
     // Wenn es eine normale E-Mail ist, machen wir sie unkopierbar und drehen sie per CSS um (Spambot-Schutz)
     $reversedEmail = strrev($trimmedEmail);
