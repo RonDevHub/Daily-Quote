@@ -22,7 +22,7 @@ class ShareHelper
             'facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . $encodedUrl,
             'twitter'  => 'https://twitter.com/intent/tweet?text=' . urlencode($fullQuote) . '&url=' . $encodedUrl,
             'threads'  => 'https://www.threads.net/intent/post?text=' . $encodedText,
-            'mastodon' => 'https://mastodonshare.com/?text=' . $encodedText,
+            'mastodon' => 'https://mastoshare.s3cr.net/?text=' . $encodedText,
             'bluesky'  => 'https://bsky.app/intent/compose?text=' . $encodedText,
             'whatsapp' => 'https://api.whatsapp.com/send?text=' . $encodedText
         ];
