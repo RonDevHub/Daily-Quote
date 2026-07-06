@@ -10,6 +10,7 @@ $nonce = base64_encode(random_bytes(16));
 
 // CSP erweitert um deine Badges: mail-shield.net und mini-badges.rondev.de
 header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net 'nonce-$nonce'; img-src 'self' data: https://images.unsplash.com/ https://mail-shield.net https://mini-badges.rondev.de; font-src 'self';");
+
 $rootDir = dirname(__DIR__);
 
 // Ressourcensparender, nativer .env-Parser für klassisches Shared Hosting (z.B. All-Inkl)
@@ -95,7 +96,7 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
             </p>
             <?php if (!empty($data['quote']['author'])): ?>
                 <p class="mt-4 text-lg md:text-xl font-medium tracking-wide opacity-75 italic drop-shadow">
-                    – <?php echo htmlspecialchars($data['quote']['author'], ENT_QUOTES, 'UTF-8'); ?>
+                    &mdash; <?php echo htmlspecialchars($data['quote']['author'], ENT_QUOTES, 'UTF-8'); ?>
                 </p>
             <?php endif; ?>
         </div>
@@ -110,11 +111,16 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
         </div>
     </main>
 
-    <footer class="relative z-10 w-full p-6 text-center text-xs opacity-60 flex flex-wrap justify-center gap-6">
-        <button id="btn-impressum" class="hover:underline cursor-pointer">Impressum</button>
-        <button id="btn-datenschutz" class="hover:underline cursor-pointer">Datenschutz</button>
-        <button id="btn-donate" class="hover:underline cursor-pointer">Spenden</button>
-    </footer >
+    <footer class="relative z-10 w-full p-6 text-center text-xs opacity-60 flex flex-wrap justify-center gap-x-6 gap-y-3">
+        <div class="w-full flex justify-center gap-6">
+            <button id="btn-impressum" class="hover:underline cursor-pointer">Impressum</button>
+            <button id="btn-datenschutz" class="hover:underline cursor-pointer">Datenschutz</button>
+            <button id="btn-donate" class="hover:underline cursor-pointer">Spenden</button>
+        </div>
+        <div class="w-full text-center mt-2">
+            <span class="text-emerald-400 font-bold">Erstellt mit ❤️ und ☕️ von <a href="https://rondev.de" target="_blank" rel="noopener noreferrer" class="hover:underline">RonDev</a> - <a href="https://github.com/RonDevHub/Daily-Quote" target="_blank" rel="noopener noreferrer" class="hover:underline">Github</a></span>
+        </div>
+    </footer>
 
 <div id="modal-impressum" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
         <div class="bg-zinc-900 border border-zinc-800 text-zinc-100 max-w-lg w-full rounded-2xl p-6 shadow-2xl relative">
