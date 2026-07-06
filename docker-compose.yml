@@ -1,0 +1,10 @@
+services:
+  daily-quote:
+    image: ghcr.io/rondevhub/daily-quote:latest
+    container_name: daily_quote_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./data:/var/www/html/data
+      - ./public/assets/bg:/var/www/html/public/assets/bg
+    restart: unless-stopped
