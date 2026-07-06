@@ -24,7 +24,13 @@ Ein extrem ressourcensparendes, autarkes PHP-Projekt, das jeden Tag vollautomati
 ### 2. Docker & Docker Compose
 Starte die Applikation lokal oder auf deinem Server:
 ```bash
-docker-compose up -d
+services:
+  daily-quote:
+    image: ghcr.io/rondevhub/daily-quote:latest
+    container_name: daily_quote_app
+    ports:
+      - "8080:80"
+    restart: unless-stopped
 ```
 
 ## Lizenz
