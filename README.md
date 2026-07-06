@@ -30,6 +30,11 @@ services:
     container_name: daily_quote_app
     ports:
       - "8080:80"
+    environment:
+      - APP_OWNER_NAME=[Dein Name / Betreibername]
+      - APP_OWNER_STREET=[Deine Straße und Hausnummer]
+      - APP_OWNER_CITY=[Deine PLZ und Ort]
+      - APP_OWNER_EMAIL=[Deine E-Mail-Adresse]
     restart: unless-stopped
 ```
 
