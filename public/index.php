@@ -29,7 +29,7 @@ $app = new \App\App(dirname(__DIR__));
 $data = $app->run();
 ?>
 <!DOCTYPE html>
-<html lang="de" class="h-full">
+<html lang="de" class="min-h-dvh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,7 +45,7 @@ $data = $app->run();
         }
     </style>
 </head>
-<body class="h-full bg-cover bg-center bg-no-repeat flex flex-col justify-between text-white relative antialiased selection:bg-white/20">
+<body class="min-h-dvh bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between text-white relative antialiased selection:bg-white/20">
 
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm z-0"></div>
 
@@ -79,7 +79,7 @@ $data = $app->run();
         <button id="btn-impressum" class="hover:underline cursor-pointer">Impressum</button>
         <button id="btn-datenschutz" class="hover:underline cursor-pointer">Datenschutz</button>
         <button id="btn-donate" class="hover:underline cursor-pointer">Spenden</button>
-    </footer>
+    </footer >
 
     <div id="modal-impressum" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
         <div class="bg-zinc-900 border border-zinc-800 text-zinc-100 max-w-lg w-full rounded-2xl p-6 shadow-2xl relative">
