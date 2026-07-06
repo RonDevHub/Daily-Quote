@@ -8,9 +8,8 @@ declare(strict_types=1);
 
 $nonce = base64_encode(random_bytes(16));
 
-// CSP erweitert, um das datenschutzkonforme Fallback-Bild zu erlauben, falls lokal keins geladen werden kann
-header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net 'nonce-$nonce'; img-src 'self' data: https://images.unsplash.com/; font-src 'self';");
-
+// CSP erweitert um deine Badges: mail-shield.net und mini-badges.rondev.de
+header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net 'nonce-$nonce'; img-src 'self' data: https://images.unsplash.com/ https://mail-shield.net https://mini-badges.rondev.de; font-src 'self';");
 $rootDir = dirname(__DIR__);
 
 // Ressourcensparender, nativer .env-Parser für klassisches Shared Hosting (z.B. All-Inkl)
