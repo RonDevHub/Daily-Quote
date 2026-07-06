@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 $nonce = base64_encode(random_bytes(16));
 
-// CSP erweitert um deine Badges: mail-shield.net und mini-badges.rondev.de
+// CSP erweitert um deine Badges
 header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net 'nonce-$nonce'; img-src 'self' data: https://images.unsplash.com/ https://mail-shield.net https://mini-badges.rondev.de; font-src 'self';");
 
 $rootDir = dirname(__DIR__);
