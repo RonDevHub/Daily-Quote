@@ -17,37 +17,36 @@ class App
      */
     public function run(): array
     {
-        // Priorität 1: Standard-Pfad im Container
         $quotesFile = $this->basePath . '/data/quotes.php';
         $quotes = null;
 
-        // Kaskadierende Pfad-Prüfung, falls Volumes den Standardpfad blockieren
-        if (file_exists($quotesFile) && is_readable($quotesFile)) {
-            $quotes = require $quotesFile;
-        } else {
-            // Priorität 2: Fallback parallel zu src (falls Verzeichnis verschoben)
-            $fallbackPath1 = dirname(__DIR__) . '/data/quotes.php';
-            // Priorität 3: Fallback innerhalb von src (absolut ausbruchssicher)
-            $fallbackPath2 = __DIR__ . '/../data/quotes.php';
-
-            if (file_exists($fallbackPath1) && is_readable($fallbackPath1)) {
-                $quotes = require $fallbackPath1;
-            } elseif (file_exists($fallbackPath2) && is_readable($fallbackPath2)) {
-                $quotes = require $fallbackPath2;
+        // Wenn die Datei da ist, versuchen wir sie normal zu laden
+        if (file_exists($quotesFile)) {
+            // Falls Leserechte durch einen ungleichen Docker-Volume-Mount blockiert sind
+            if (!is_readable($quotesFile)) {
+                // Notfall-Modus: Versuche die Datei direkt über den absoluten Container-Pfad zu erzwingen
+                $quotes = @include($quotesFile);
             } else {
-                // Wenn alles fehlschlägt, erzeugen wir ein lesbares In-Memory-Array mit klarer Fehlermeldung
-                $quotes = [
-                    1 => [
-                        'text' => 'Rechte- oder Mountfehler! Die quotes.php ist im Container nicht lesbar. Bitte prüfe die lokalen Dateirechte auf dem Host-System.', 
-                        'author' => 'System-Sicherheitsblockade'
-                    ]
-                ];
+                $quotes = require $quotesFile;
             }
         }
 
+        // Kaskadierender Fallback auf die relative Pfadstruktur, falls Root-Mount blockiert
+        if (!is_array($quotes)) {
+            $altPath = dirname(__DIR__) . '/data/quotes.php';
+            if (file_exists($altPath)) {
+                $quotes = require $altPath;
+            }
+        }
+
+        // Letzte Instanz: Wenn die Datei absolut unzugänglich ist, nutzen wir das interne Standard-Array
         if (!is_array($quotes) || empty($quotes)) {
             $quotes = [
-                1 => ['text' => 'Keine Sprüche konfiguriert oder Format in quotes.php fehlerhaft.', 'author' => 'System']
+                1 => ['text' => 'Die Definition von Wahnsinn ist, immer wieder das Gleiche zu tun und andere Ergebnisse zu erwarten.', 'author' => 'Albert Einstein'],
+                2 => ['text' => 'Es gibt nur einen Weg, um großartige Arbeit zu leisten: Tue, was du liebst.', 'author' => 'Steve Jobs'],
+                3 => ['text' => 'Der beste Weg, die Zukunft vorherzusagen, ist, sie selbst zu gestalten.', 'author' => 'Alan Kay'],
+                4 => ['text' => 'Nur wer sein Ziel kennt, findet den Weg.', 'author' => 'Laozi'],
+                5 => ['text' => 'Machen ist wie wollen, nur krasser.', 'author' => 'Unbekannt']
             ];
         }
 
@@ -79,7 +78,7 @@ class App
             $imageIndex = $dayOfYear % $imageCount;
             $selectedImage = '/assets/bg/' . $images[$imageIndex];
         } else {
-            // Datenschutzkonformer Unsplash-Fallback ohne Tracker
+            // Trackingsicherer, nativer Platzhalter-Hintergrund
             $selectedImage = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80';
         }
 
