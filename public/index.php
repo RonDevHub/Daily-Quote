@@ -27,6 +27,12 @@ spl_autoload_register(function ($class) {
 
 $app = new \App\App(dirname(__DIR__));
 $data = $app->run();
+
+// Auslesen der Docker-Umgebungsvariablen mit Fallbacks für das Impressum
+$ownerName   = getenv('APP_OWNER_NAME')   ?: '[Dein Name / Betreibername]';
+$ownerStreet = getenv('APP_OWNER_STREET') ?: '[Deine Straße und Hausnummer]';
+$ownerCity   = getenv('APP_OWNER_CITY')   ?: '[Deine PLZ und Ort]';
+$ownerEmail  = getenv('APP_OWNER_EMAIL')  ?: '[Deine E-Mail-Adresse]';
 ?>
 <!DOCTYPE html>
 <html lang="de" class="min-h-dvh">
@@ -81,14 +87,18 @@ $data = $app->run();
         <button id="btn-donate" class="hover:underline cursor-pointer">Spenden</button>
     </footer >
 
-    <div id="modal-impressum" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+<div id="modal-impressum" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
         <div class="bg-zinc-900 border border-zinc-800 text-zinc-100 max-w-lg w-full rounded-2xl p-6 shadow-2xl relative">
             <h2 class="text-xl font-bold mb-4 border-b border-zinc-800 pb-2">Impressum</h2>
             <div class="space-y-2 text-sm overflow-y-auto max-h-[60vh]">
                 <p class="font-bold">Angaben gemäß § 5 TMG:</p>
-                <p>[Dein Name / Betreibername]<br>[Deine Straße und Hausnummer]<br>[Deine PLZ und Ort]</p>
+                <p>
+                    <?php echo htmlspecialchars($ownerName, ENT_QUOTES, 'UTF-8'); ?><br>
+                    <?php echo htmlspecialchars($ownerStreet, ENT_QUOTES, 'UTF-8'); ?><br>
+                    <?php echo htmlspecialchars($ownerCity, ENT_QUOTES, 'UTF-8'); ?>
+                </p>
                 <p class="font-bold mt-4">Kontakt:</p>
-                <p>E-Mail: [Deine E-Mail-Adresse]</p>
+                <p>E-Mail: <?php echo htmlspecialchars($ownerEmail, ENT_QUOTES, 'UTF-8'); ?></p>
             </div>
             <button id="close-impressum" class="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition-colors cursor-pointer">Schließen</button>
         </div>
