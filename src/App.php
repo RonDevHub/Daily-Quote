@@ -42,11 +42,11 @@ class App
         // Letzte Instanz: Wenn die Datei absolut unzugänglich ist, nutzen wir das interne Standard-Array
         if (!is_array($quotes) || empty($quotes)) {
             $quotes = [
-                1 => ['text' => 'Die Definition von Wahnsinn ist, immer wieder das Gleiche zu tun und andere Ergebnisse zu erwarten.', 'author' => 'Albert Einstein'],
-                2 => ['text' => 'Es gibt nur einen Weg, um großartige Arbeit zu leisten: Tue, was du liebst.', 'author' => 'Steve Jobs'],
-                3 => ['text' => 'Der beste Weg, die Zukunft vorherzusagen, ist, sie selbst zu gestalten.', 'author' => 'Alan Kay'],
-                4 => ['text' => 'Nur wer sein Ziel kennt, findet den Weg.', 'author' => 'Laozi'],
-                5 => ['text' => 'Machen ist wie wollen, nur krasser.', 'author' => 'Unbekannt']
+                1 => ['text' => 'Die Definition von Wahnsinn ist, immer wieder das Gleiche zu tun und andere Ergebnisse zu erwarten.', 'author' => 'Standard'],
+                2 => ['text' => 'Es gibt nur einen Weg, um großartige Arbeit zu leisten: Tue, was du liebst.', 'author' => 'Standard'],
+                3 => ['text' => 'Der beste Weg, die Zukunft vorherzusagen, ist, sie selbst zu gestalten.', 'author' => 'Standard'],
+                4 => ['text' => 'Nur wer sein Ziel kennt, findet den Weg.', 'author' => 'Standard'],
+                5 => ['text' => 'Machen ist wie wollen, nur krasser.', 'author' => 'Standard']
             ];
         }
 
