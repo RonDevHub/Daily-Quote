@@ -1,3 +1,6 @@
+kind: pipeline
+name: default
+
 steps:
   # --- 1. Main-Branch (latest) ---
   publish-latest:
