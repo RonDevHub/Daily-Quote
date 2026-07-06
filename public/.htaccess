@@ -1,0 +1,30 @@
+# 1. Server-Signaturen und Logging einschränken (soweit vom Hoster erlaubt)
+ServerSignature Off
+
+# 2. Zeichensatz erzwingen
+AddDefaultCharset UTF-8
+
+# 3. Sicherheits-Header (Datenschutz & Hardening)
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "DENY"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "no-referrer"
+</IfModule>
+
+# 4. URL Rewriting für saubere URLs (Single Entry Point)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Zugriff auf Systemordner blockieren
+    RewriteRule ^(?i)(../src|../data) - [F]
+
+    # Wenn die Datei oder das Verzeichnis existiert, direkt ausliefern
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Alles andere auf die index.php umleiten
+    RewriteRule ^ index.php [L]
+</IfModule>
