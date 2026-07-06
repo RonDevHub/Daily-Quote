@@ -60,7 +60,7 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
 } else {
     // Wenn es eine normale E-Mail ist, machen wir sie unkopierbar und drehen sie per CSS um (Spambot-Schutz)
     $reversedEmail = strrev($trimmedEmail);
-    $emailHtml = '<span class="inline-block select-none pointer-events-none" style="direction: rtl; unicode-bidi: bidi-override;">' . htmlspecialchars($reversedEmail, ENT_QUOTES, 'UTF-8') . '</span>';
+    $emailHtml = 'E-Mail: <span class="inline-block select-none pointer-events-none" style="direction: rtl; unicode-bidi: bidi-override;">' . htmlspecialchars($reversedEmail, ENT_QUOTES, 'UTF-8') . '</span>';
 }
 ?>
 <!DOCTYPE html>
@@ -127,7 +127,7 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
                     <?php echo htmlspecialchars($ownerCity, ENT_QUOTES, 'UTF-8'); ?>
                 </p>
                 <p class="font-bold mt-4">Kontakt:</p>
-                <p>E-Mail: <?php echo $emailHtml; ?></p>
+                <p><?php echo $emailHtml; ?></p>
             </div>
             <button id="close-impressum" class="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition-colors cursor-pointer">Schließen</button>
         </div>
