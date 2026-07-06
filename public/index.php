@@ -124,7 +124,7 @@ $data = $app->run();
             <h2 class="text-xl font-bold mb-4 border-b border-zinc-800 pb-2">Unterstützung / Spenden</h2>
             <div class="space-y-2 text-sm text-center py-4">
                 <p>Wenn dir diese werbefreie und datenschutzfreundliche App gefällt, kannst du das Projekt hier unterstützen:</p>
-                <p class="pt-4 font-bold text-lg text-emerald-400">[Hier Spendenlink oder LiberaPay / PayPal einfügen]</p>
+                <p class="pt-4 font-bold text-lg text-emerald-400"><a href="https://rondev.de/donate" target="_blank" rel="nofollow">Donate</a></p>
             </div>
             <button id="close-donate" class="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition-colors cursor-pointer">Schließen</button>
         </div>
