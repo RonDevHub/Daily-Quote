@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Single Entry Point
  * Datenschutzkonform - Keine Cookies, Keine Sessions, Keine Logs.
@@ -8,7 +9,7 @@ declare(strict_types=1);
 
 $nonce = base64_encode(random_bytes(16));
 
-// CSP erweitert um deine Badges
+// CSP erweitert um deine Badges: mail-shield.net und mini-badges.rondev.de
 header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net 'nonce-$nonce'; img-src 'self' data: https://images.unsplash.com/ https://mail-shield.net https://mini-badges.rondev.de; font-src 'self';");
 
 $rootDir = dirname(__DIR__);
@@ -50,6 +51,10 @@ $ownerName   = getenv('APP_OWNER_NAME')   ?: '[Dein Name / Betreibername]';
 $ownerStreet = getenv('APP_OWNER_STREET') ?: '[Deine Straße und Hausnummer]';
 $ownerCity   = getenv('APP_OWNER_CITY')   ?: '[Deine PLZ und Ort]';
 $ownerEmail  = getenv('APP_OWNER_EMAIL')  ?: '[Deine E-Mail-Adresse]';
+$showImpressumEnv = getenv('APP_LINK_IMPRESSUM')   ?: ($_ENV['APP_LINK_IMPRESSUM']   ?? 'true');
+
+// Schalter für Impressum auswerten (Alles außer 'true' oder 1 wird als false gewertet)
+$showImpressum = (filter_var($showImpressumEnv, FILTER_VALIDATE_BOOLEAN));
 
 // Logik für die intelligente Erkennung der E-Mail / des Kontakt-Links
 $emailHtml = '';
@@ -66,6 +71,7 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
 ?>
 <!DOCTYPE html>
 <html lang="de" class="min-h-dvh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -81,6 +87,7 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
         }
     </style>
 </head>
+
 <body class="min-h-dvh bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between text-white relative antialiased selection:bg-white/20">
 
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm z-0"></div>
@@ -113,7 +120,9 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
 
     <footer class="relative z-10 w-full p-6 text-center text-xs opacity-60 flex flex-wrap justify-center gap-x-6 gap-y-3">
         <div class="w-full flex justify-center gap-6">
-            <button id="btn-impressum" class="hover:underline cursor-pointer">Impressum</button>
+            <?php if ($showImpressum): ?>
+                <button id="btn-impressum" class="hover:underline cursor-pointer">Impressum</button>
+            <?php endif; ?>
             <button id="btn-datenschutz" class="hover:underline cursor-pointer">Datenschutz</button>
             <button id="btn-donate" class="hover:underline cursor-pointer">Spenden</button>
         </div>
@@ -122,22 +131,24 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
         </div>
     </footer>
 
-<div id="modal-impressum" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-        <div class="bg-zinc-900 border border-zinc-800 text-zinc-100 max-w-lg w-full rounded-2xl p-6 shadow-2xl relative">
-            <h2 class="text-xl font-bold mb-4 border-b border-zinc-800 pb-2">Impressum</h2>
-            <div class="space-y-2 text-sm overflow-y-auto max-h-[60vh]">
-                <p class="font-bold">Angaben gemäß § 5 TMG:</p>
-                <p>
-                    <?php echo htmlspecialchars($ownerName, ENT_QUOTES, 'UTF-8'); ?><br>
-                    <?php echo htmlspecialchars($ownerStreet, ENT_QUOTES, 'UTF-8'); ?><br>
-                    <?php echo htmlspecialchars($ownerCity, ENT_QUOTES, 'UTF-8'); ?>
-                </p>
-                <p class="font-bold mt-4">Kontakt:</p>
-                <p><?php echo $emailHtml; ?></p>
+    <?php if ($showImpressum): ?>
+        <div id="modal-impressum" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+            <div class="bg-zinc-900 border border-zinc-800 text-zinc-100 max-w-lg w-full rounded-2xl p-6 shadow-2xl relative">
+                <h2 class="text-xl font-bold mb-4 border-b border-zinc-800 pb-2">Impressum</h2>
+                <div class="space-y-2 text-sm overflow-y-auto max-h-[60vh]">
+                    <p class="font-bold">Angaben gemäß § 5 TMG:</p>
+                    <p>
+                        <?php echo htmlspecialchars($ownerName, ENT_QUOTES, 'UTF-8'); ?><br>
+                        <?php echo htmlspecialchars($ownerStreet, ENT_QUOTES, 'UTF-8'); ?><br>
+                        <?php echo htmlspecialchars($ownerCity, ENT_QUOTES, 'UTF-8'); ?>
+                    </p>
+                    <p class="font-bold mt-4">Kontakt:</p>
+                    <p><?php echo $emailHtml; ?></p>
+                </div>
+                <button id="close-impressum" class="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition-colors cursor-pointer">Schließen</button>
             </div>
-            <button id="close-impressum" class="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition-colors cursor-pointer">Schließen</button>
         </div>
-    </div>
+    <?php endif; ?>
 
     <div id="modal-datenschutz" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
         <div class="bg-zinc-900 border border-zinc-800 text-zinc-100 max-w-lg w-full rounded-2xl p-6 shadow-2xl relative">
@@ -178,9 +189,18 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
     <script nonce="<?php echo $nonce; ?>">
         document.addEventListener('DOMContentLoaded', () => {
             const modals = {
-                'btn-impressum': { modal: 'modal-impressum', close: 'close-impressum' },
-                'btn-datenschutz': { modal: 'modal-datenschutz', close: 'close-datenschutz' },
-                'btn-donate': { modal: 'modal-donate', close: 'close-donate' }
+                <?php if ($showImpressum): ?> 'btn-impressum': {
+                        modal: 'modal-impressum',
+                        close: 'close-impressum'
+                    },
+                <?php endif; ?> 'btn-datenschutz': {
+                    modal: 'modal-datenschutz',
+                    close: 'close-datenschutz'
+                },
+                'btn-donate': {
+                    modal: 'modal-donate',
+                    close: 'close-donate'
+                }
             };
 
             function toggle(id) {
@@ -208,4 +228,5 @@ if (filter_var($trimmedEmail, FILTER_VALIDATE_URL)) {
         });
     </script>
 </body>
+
 </html>
