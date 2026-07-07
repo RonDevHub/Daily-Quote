@@ -5,6 +5,7 @@ services:
     ports:
       - "8080:80"
     environment:
+      - APP_LINK_IMPRESSUM=true #Soll das Impressum auf der Seite erscheinen? true = ja, false = nein
       - APP_OWNER_NAME=[Dein Name / Betreibername]
       - APP_OWNER_STREET=[Deine Straße und Hausnummer]
       - APP_OWNER_CITY=[Deine PLZ und Ort]
